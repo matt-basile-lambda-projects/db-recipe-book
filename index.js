@@ -5,13 +5,14 @@ const recipeRouter = require('./Routes/recipeRouter')
 
 const db = knex(knexConfig.development);
 const server = express();
+const Dishes = require('./data/helpers/dishesModel')
 server.use(express.json());
 server.use("/recipes", recipeRouter)
 
 // DISHES ACTIONS
 server.get('/dishes', async (req, res) =>{
     try {
-     const dishes = await db('dishes');
+     const dishes = await Dishes.getDishes()
      res.status(200).json(dishes)
     } catch (error) {
         res.status(500).json(error)
@@ -19,7 +20,7 @@ server.get('/dishes', async (req, res) =>{
 })
 server.get('/dishes/:id', async (req, res) =>{
     try {
-     const dish = await db('dishes').where({id: req.params.id});
+     const dish = await Dishes.getDish(req.params.id);
      res.status(200).json(dish)
     } catch (error) {
         res.status(500).json(error)
@@ -35,9 +36,8 @@ server.get('/dishes/:id/recipes', async (req, res) =>{
 })
 server.post('/dishes', async (req, res) => {
     try{
-      const [id] = await db('dishes').insert(req.body);
-    //   const dish = await db('dishes').where({id}).first();
-      res.status(200).json(id);
+      const dish = Dishes.addDish(req.body)
+      res.status(200).json(dish);
     }
     catch(error){
      res.status(500).json(error);
