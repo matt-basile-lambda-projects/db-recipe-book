@@ -1,13 +1,14 @@
 const express = require("express")
 const knex = require("knex")
 const knexConfig = require('../knexfile');
-
 const db = knex(knexConfig.development);
 const router = express.Router();
 
+const Recipes = require('../data/helpers/recipesModel')
+
 router.get('/', async (req, res) => {
     try {
-        const recipes = await db('recipes');
+        const recipes = await Recipes.getRecipes();
         res.status(200).json(recipes)
     } catch (error) {
         res.status(500).json(error);
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 //GET SINGLE recipe
 router.get('/:id', async (req, res) => {
     try {
-      const recipe = await db('recipes').where({id: req.params.id}).first();
+      const recipe = await Recipes.getRecipe(req.params.id);
       res.status(200).json(recipe)
     } catch (error) {
       res.status(500).json(error);
@@ -25,9 +26,9 @@ router.get('/:id', async (req, res) => {
   //CREATE recipe
   router.post('/', async (req, res) => {
     try {
-      const [id] = await db('recipes').insert(req.body);
+      const recipe = await Recipes.addRecipe(req.body);
     //   const student = await db('recipes').where({id}).first();
-      res.status(200).json(id)
+      res.status(200).json(recipe)
     } catch (error) {
       res.status(500).json(error);
     }
