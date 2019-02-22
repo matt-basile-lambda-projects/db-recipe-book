@@ -4,9 +4,8 @@ exports.up = function(knex, Promise) {
         tbl.increments();
         tbl.string('name', 250).notNullable();
         tbl.integer('dishes_id').unsigned().references('id').inTable('dishes')
-        .onDelete('RESTRICT').onUpdate('CASCADE')
-        tbl.timestamps(true, true)
-        tbl.string('instructions')
+        .onDelete('RESTRICT').onUpdate('CASCADE');
+        tbl.timestamps(true, true);
     })
 };
 

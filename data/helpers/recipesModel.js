@@ -17,5 +17,10 @@ async function addRecipe(recipe){
 }
 function getRecipe(id){
   return db('recipes')
-  .where( { id } );
+  // .from('ingredients')
+  .innerJoin('recipe_ingredients', function() {
+    this.on('recipes.id', '=', 'recipe_ingredients.recipe_id').orOn('ingredients.id', '=', 'recipe_ingredients.id')
+  })
+  .where( { id } )
 }
+

@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     .onDelete('RESTRICT').onUpdate('CASCADE');
     tbl.integer('recipe_id').unsigned().references('id').inTable('recipes')
     .onDelete('RESTRICT').onUpdate('CASCADE');
-
+    
     })
 };
 
